@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="text-center">Add Cd</h2>
+        <form th:object="${cd}" th:action="@{/savecd}" method="post">
+            <div class="form-group">
+                <label for="author">Artist</label>
+                <input class="form-control" type="text" id="artist" th:field="*{artist}" />
+            </div>
+            <div class="form-group">
+                <label for="title">Song name</label>
+                <input class="form-control" type="text" id="song_name" th:field="*{songName}" />
+            </div>
+            <div class="form-group">
+                <label for="title">Album</label>
+                <input class="form-control" type="text" id="album" th:field="*{album}" />
+            </div>
+            <div class="form-group">
+                <label for="isbn">Tag</label>
+                <input class="form-control" type="text" id="tag" th:field="*{tag}" />
+            </div>
+            <div class="form-group">
+                <label for="publication_year">Year</label>
+                <input class="form-control" type="text" id="publication_year" th:field="*{release_year}" />
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input class="form-control" type="text" id="price" th:field="*{price}" />
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select class="form-control" id="category" th:field="*{category}">
+                    <option th:each="category: ${category}" th:value="${category.categoryId}" th:text="${category.name}"></option>
+                </select>
+            </div>
+            <input class="btn btn-success" type="submit" value="savecd" />
+        </form>
+        <a th:href="@{/cdlist}" class="btn btn-secondary">Back to Cd List</a>
+
+    </div>
+</body>
+
+</html>

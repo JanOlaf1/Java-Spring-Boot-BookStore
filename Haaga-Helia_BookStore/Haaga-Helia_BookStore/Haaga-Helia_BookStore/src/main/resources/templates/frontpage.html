@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front page</title>
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            color: #000000;
+            padding: 5px;
+            text-decoration: none;
+        }
+
+        .dropdown-content a:hover {
+            color: #FFFFFF;
+            background-color: #00A4BD;
+        }
+
+        /* CSS for centering the welcome text */
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* CSS for moving dropdown to the right */
+        .menu-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex: 1;
+        }
+    </style>
+
+    
+</head>
+<body>
+    <div class="container">
+        <div class="menu-container">
+            <div class="dropdown">
+                <button>Menu</button>
+                <div class="dropdown-content">
+                    <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" href="/add" class="btn btn-success">Add Book</a>
+                    <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" href="/addcd" class="btn btn-success">Add Cd</a>
+                    <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" href="/saveCategory" class="btn btn-success">Add Category</a>
+                    <a class="btn btn-primary" href="/cdlist">To the cdlist</a>
+                    <a class="btn btn-primary" href="/frontpage">Main page</a>
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Sign Out" class="btn btn-danger" aria-label="Sign Out" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid h-100 d-flex flex-column align-items-end justify-content-between">
+        <div class="container d-flex flex-column align-items-center justify-content-center">
+            <!-- Keskitys lisätty tähän -->
+            <h1 class="welcome-text">Welcome to the Front page</h1>
+            
+            <form action="/searchItems" method="GET">
+                <div class="search-container">
+                    <input type="text" name="searchTerm" placeholder="Search books and CDs">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a href="/frontpage" class="btn btn-primary">Reset</a>
+                </div>
+            </form>
+
+            <div class="search-results mt-3">
+                <h2>Search Results</h2>
+                <div class="d-flex flex-row">
+                    <div class="books">
+                        <h3>Books</h3>
+                        <ul>
+                            <th:block th:if="${not #lists.isEmpty(books)}">
+                                <th:block th:each="book : ${books}">
+                                    <li>
+                                        <span th:text="${book.title}"></span> by <span th:text="${book.author}"></span>
+                                    </li>
+                                </th:block>
+                            </th:block>
+                            <th:block th:if="${#lists.isEmpty(books)}">
+                                <li>No books found</li>
+                            </th:block>
+                        </ul>
+                    </div>
+                    <div class="cds ml-3">
+                        <h3>CDs</h3>
+                        <ul>
+                            <th:block th:if="${not #lists.isEmpty(cds)}">
+                                <th:block th:each="cd : ${cds}">
+                                    <li>
+                                        <span th:text="${cd.album}"></span> by <span th:text="${cd.artist}"></span>
+                                    </li>
+                                </th:block>
+                            </th:block>
+                            <th:block th:if="${#lists.isEmpty(cds)}">
+                                <li>No CDs found</li>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex flex-column mt-3">
+                <a class="btn btn-primary btn-lg mb-2" href="/booklist">Booklist</a>
+                <a class="btn btn-primary btn-lg mb-2" href="/cdlist">CD list</a>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

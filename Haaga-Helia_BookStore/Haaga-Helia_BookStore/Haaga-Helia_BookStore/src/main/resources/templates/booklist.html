@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookStore</title>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            color: #000000;
+            padding: 5px;
+            text-decoration: none;
+        }
+
+        .dropdown-content a:hover {
+            color: #FFFFFF;
+            background-color: #00A4BD;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Book List</h1>
+        <div class="dropdown">
+            <button>Menu</button>
+            <div class="dropdown-content">
+                <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" href="/add" class="btn btn-success">Add Book</a>
+                <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" href="/saveCategory" class="btn btn-success">Add Category</a>
+                <a class="btn btn-primary" href="/cdlist">To the cdlist</a>
+                <a class="btn btn-primary" href="/frontpage">Main page</a>
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Sign Out" class="btn btn-danger" aria-label="Sign Out" />
+                </form>
+            </div>
+        </div>
+    </div>
+    <form th:action="@{/search}" method="get">
+        <div class="form-group">
+            <label for="search">Search Books:</label>
+            <input type="text" id="search" class="form-control" name="searchTerm" aria-label="Search Bar" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="/booklist" class="btn btn-secondary">Reset</a>
+    </form>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Author
+                    <a th:href="@{/booklist/sortByAuthorAsc}">&uarr;</a>
+                    <a th:href="@{/booklist/sortByAuthorDesc}">&darr;</a>
+                </th>
+                <th>Title
+                    <a th:href="@{/booklist/sortByTitleAsc}">&uarr;</a>
+                    <a th:href="@{/booklist/sortByTitleDesc}">&darr;</a>
+
+                </th>
+                <th>ISBN</th>
+                <th>Year</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">Action</th>
+            </tr>
+        </thead>
+        <tbody id="bookTableBody">
+            <tr th:each="book : ${books}">
+                <td th:text="${book.author}"></td>
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.isbn}"></td>
+                <td th:text="${book.publication_year}"></td>
+                <td th:text="${book.price}"></td>
+                <td th:text="${book.category?.name}"></td>
+                <td>
+                    <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"
+                        th:href="@{/delete/{id}(id=${book.id})} "
+                        onclick="return confirm('Are you sure you want to delete this Book?')"
+                        class="btn btn-danger">Delete</a>
+                    <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"
+                        th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-primary">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</body>
+
+</html>
