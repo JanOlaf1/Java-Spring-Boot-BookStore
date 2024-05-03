@@ -29,6 +29,7 @@ Below is a picture demonstrating how the search bar works on the front page when
 ![image](https://github.com/JanOlaf1/Java-Spring-Boot-BookStore/assets/122294366/85437b14-2bce-4be5-be5e-eb40bed813f3)
 
 The Book and CD lists also feature ascending or descending order. For example, below is a picture demonstrating the ascending function, organized by authors starting from the letter 'A'.
+
 ![image](https://github.com/JanOlaf1/Java-Spring-Boot-BookStore/assets/122294366/ffdae4a8-94d1-4bc0-ad1b-7c976db51faa)
 
 Note that if you use this app, it operates via H2 console, and the data won't be saved if the app is shut down. To ensure data persistence even if the app is shut down, I recommend using PostgreSQL.
